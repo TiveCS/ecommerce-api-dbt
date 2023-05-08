@@ -10,14 +10,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       String @id @default(cuid())
-  email    String @unique
-  name     String
-  password String
+model Customer {
+  id         String @id @default(cuid())
+  identityId String @unique
+  addressId  String @unique
 
-  address   Address @relation(fields: [addressId], references: [id])
-  addressId String  @unique
+  identity UserIdentity @relation(fields: [identityId], references: [id])
+  address  Address      @relation(fields: [addressId], references: [id])
 
   createdAt DateTime  @default(now())
   deletedAt DateTime?
@@ -26,20 +25,34 @@ model User {
 }
 
 model Merchant {
-  id       String @id @default(cuid())
-  name     String
-  email    String @unique
-  password String
+  id         String @id @default(cuid())
+  identityId String @unique
+  addressId  String @unique
 
-  address   Address @relation(fields: [addressId], references: [id])
-  addressId String  @unique
-
+  identity UserIdentity @relation(fields: [identityId], references: [id])
+  address  Address      @relation(fields: [addressId], references: [id])
   products Product[]
 
   createdAt DateTime  @default(now())
   deletedAt DateTime?
 
   @@map("merchants")
+}
+
+model UserIdentity {
+  id       String @id @default(cuid())
+  name     String
+  email    String @unique
+  password String
+  phone    String
+
+  customer Customer?
+  merchant Merchant?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user_identities")
 }
 
 model Address {
@@ -50,7 +63,7 @@ model Address {
   zip    String
 
   merchant Merchant?
-  user     User?
+  customer Customer?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
