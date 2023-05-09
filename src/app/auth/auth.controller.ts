@@ -10,6 +10,8 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
 import { JwtGuard } from './guards';
+import { User } from './decorators';
+import { JwtUserType } from './types';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +42,13 @@ export class AuthController {
 
   @Get('check')
   @UseGuards(JwtGuard)
-  async check() {
-    return { message: 'Token is valid', status: 'success' };
+  async check(@User() user: JwtUserType) {
+    return {
+      message: 'Token is valid',
+      status: 'success',
+      data: {
+        userId: user.userId,
+      },
+    };
   }
 }
