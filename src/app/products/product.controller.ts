@@ -1,4 +1,13 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto';
 import { JwtGuard } from '../auth/guards';
@@ -19,6 +28,21 @@ export class ProductController {
 
     return {
       message: 'Product created successfully',
+      status: 'success',
+      data,
+    };
+  }
+
+  @Get()
+  async getProducts(
+    @Query('name') name?: string,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('cursor') cursor?: string,
+  ) {
+    const data = await this.productService.getProducts(name, limit, cursor);
+
+    return {
+      message: 'Products retrieved successfully',
       status: 'success',
       data,
     };

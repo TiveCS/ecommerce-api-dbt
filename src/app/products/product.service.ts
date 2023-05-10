@@ -31,4 +31,21 @@ export class ProductService {
       },
     });
   }
+
+  async getProducts(name?: string, limit?: number, cursor?: string) {
+    return await this.prisma.product.findMany({
+      where: name ? { title: { contains: name } } : {},
+      orderBy: {
+        sold: 'desc',
+      },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        sold: true,
+      },
+      take: limit || 10,
+      cursor: cursor ? { id: cursor } : undefined,
+    });
+  }
 }
