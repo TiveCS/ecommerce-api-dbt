@@ -47,7 +47,7 @@ export class AuthController {
       message: 'Token is valid',
       status: 'success',
       data: {
-        userId: user.userId,
+        userId: user.identityId,
       },
     };
   }
