@@ -4,9 +4,7 @@ import {
   DefaultValuePipe,
   Delete,
   Get,
-  HttpStatus,
   Param,
-  ParseFilePipeBuilder,
   ParseIntPipe,
   Post,
   Put,
@@ -20,8 +18,8 @@ import { User } from '../auth/decorators';
 import { JwtGuard } from '../auth/guards';
 import { JwtUserType } from '../auth/types';
 import { CreateProductDto, UpdateProductDto } from './dto';
-import { ProductService } from './product.service';
 import { AssetsFilesValidatorPipe } from './pipes';
+import { ProductService } from './product.service';
 
 @Controller('products')
 export class ProductController {
