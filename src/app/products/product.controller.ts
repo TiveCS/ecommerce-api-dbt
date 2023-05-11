@@ -75,11 +75,15 @@ export class ProductController {
     @Param('productId') productId: string,
     @User() merchant: JwtUserType,
   ) {
-    await this.productService.deleteProductById(productId, merchant);
+    const data = await this.productService.deleteProductById(
+      productId,
+      merchant,
+    );
 
     return {
       message: 'Product deleted successfully',
       status: 'success',
+      data: data,
     };
   }
 
