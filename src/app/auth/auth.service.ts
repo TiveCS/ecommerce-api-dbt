@@ -76,6 +76,11 @@ export class AuthService {
       select: {
         id: true,
         password: true,
+        merchant: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
@@ -85,7 +90,12 @@ export class AuthService {
 
     if (!isPasswordValid) throw new ForbiddenException('Invalid credentials');
 
-    const token = await this.tokenService.generateToken({ sub: identity.id });
+    const isMerchant = identity.merchant ? true : false;
+
+    const token = await this.tokenService.generateToken({
+      sub: identity.id,
+      role: isMerchant ? 'merchant' : 'customer',
+    });
 
     return token;
   }
