@@ -9,6 +9,7 @@ import {
   ParseFilePipeBuilder,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UploadedFiles,
   UseGuards,
@@ -18,8 +19,9 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { User } from '../auth/decorators';
 import { JwtGuard } from '../auth/guards';
 import { JwtUserType } from '../auth/types';
-import { CreateProductDto } from './dto';
+import { CreateProductDto, UpdateProductDto } from './dto';
 import { ProductService } from './product.service';
+import { AssetsFilesValidatorPipe } from './pipes';
 
 @Controller('products')
 export class ProductController {
@@ -31,19 +33,7 @@ export class ProductController {
   async createProduct(
     @Body() dto: CreateProductDto,
     @User() merchant: JwtUserType,
-    @UploadedFiles(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: '.(jpg|jpeg|png)',
-        })
-        .addMaxSizeValidator({
-          maxSize: 1024 * 1024 * 3, // 3 MB
-        })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
+    @UploadedFiles(AssetsFilesValidatorPipe)
     images?: Express.Multer.File[],
   ) {
     const data = await this.productService.createProduct(dto, merchant, images);
@@ -92,6 +82,29 @@ export class ProductController {
     return {
       message: 'Product deleted successfully',
       status: 'success',
+    };
+  }
+
+  @Put(':productId')
+  @UseGuards(JwtGuard)
+  @UseInterceptors(FilesInterceptor('images'))
+  async updateProductById(
+    @Param('productId') productId: string,
+    @User() merchant: JwtUserType,
+    @Body() dto: UpdateProductDto,
+    @UploadedFiles(AssetsFilesValidatorPipe) images?: Express.Multer.File[],
+  ) {
+    const data = await this.productService.updateProductById(
+      productId,
+      dto,
+      merchant,
+      images,
+    );
+
+    return {
+      message: 'Product updated successfully',
+      status: 'success',
+      data: data,
     };
   }
 }

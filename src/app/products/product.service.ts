@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { CreateProductDto } from './dto';
+import { CreateProductDto, UpdateProductDto } from './dto';
 import { JwtUserType } from '../auth/types';
 import { MinioService } from 'src/storage/minio/minio.service';
 import { ConfigService } from '@nestjs/config';
@@ -154,6 +154,82 @@ export class ProductService {
       },
       select: {
         deletedAt: true,
+      },
+    });
+  }
+
+  async updateProductById(
+    productId: string,
+    dto: UpdateProductDto,
+    merchant: JwtUserType,
+    images?: Express.Multer.File[],
+  ) {
+    const { title, price, description, stocks } = dto;
+
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+      select: {
+        assets: {
+          select: {
+            images: true,
+          },
+        },
+        merchant: {
+          select: {
+            identityId: true,
+          },
+        },
+      },
+    });
+
+    if (!product) throw new NotFoundException('Product not found');
+
+    if (product.merchant.identityId !== merchant.identityId)
+      throw new ForbiddenException(
+        'You are not allowed to update this product',
+      );
+
+    const assetsKeys =
+      images && images.length > 0
+        ? images.map((image) => `${uuidv4()}_${image.originalname}`)
+        : [];
+
+    if (assetsKeys.length > 0) {
+      await Promise.all([
+        this.minio.removeObjects(
+          this.config.get('S3_BUCKET'),
+          product.assets.images,
+        ),
+
+        Promise.all(
+          images.map((image, index) =>
+            this.minio.putObject(
+              this.config.get('S3_BUCKET'),
+              `${assetsKeys[index]}`,
+              image.buffer,
+            ),
+          ),
+        ),
+      ]);
+    }
+
+    return this.prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        title,
+        price,
+        description,
+        stocks,
+        assets: {
+          update: assetsKeys.length > 0 ? { images: assetsKeys } : undefined,
+        },
+      },
+      select: {
+        updatedAt: true,
       },
     });
   }
