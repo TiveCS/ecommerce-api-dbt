@@ -1,0 +1,1987 @@
+{
+	"info": {
+		"_postman_id": "b8ee5bf6-6ade-4317-8d96-d0ac4f994ac5",
+		"name": "Ecommerce API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16890885"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "register",
+					"item": [
+						{
+							"name": "Register with invalid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"notemail\",\r\n    \"password\": 9090,\r\n    \"name\": 123,\r\n    \"phone\": [],\r\n    \"authType\": \"customer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/register",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[Andi] Register with valid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has property 'id'\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('id');\r",
+											"\r",
+											"    pm.environment.set('andi_customer_id', jsonData.data.id);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{andi_email}}\",\r\n    \"password\": \"{{andi_password}}\",\r\n    \"name\": \"{{andi_name}}\",\r\n    \"phone\": \"{{andi_phone}}\",\r\n    \"authType\": \"customer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/register",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[John] Register with valid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has property 'id'\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('id');\r",
+											"\r",
+											"    pm.environment.set('john_merchant_id', jsonData.data.id);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{john_email}}\",\r\n    \"password\": \"{{john_password}}\",\r\n    \"name\": \"{{john_name}}\",\r\n    \"phone\": \"{{john_phone}}\",\r\n    \"authType\": \"merchant\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/register",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[Andi] Register with existing credentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{andi_email}}\",\r\n    \"password\": \"{{andi_password}}\",\r\n    \"name\": \"{{andi_name}}\",\r\n    \"phone\": \"{{andi_phone}}\",\r\n    \"authType\": \"customer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/register",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "login",
+					"item": [
+						{
+							"name": "Login with invalid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"notemail\",\r\n    \"password\": 123\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/login",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[Andi] Login with correct credentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has property 'access_token'\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('access_token');\r",
+											"\r",
+											"    pm.environment.set('andi_access_token', jsonData.data.access_token);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{andi_email}}\",\r\n    \"password\": \"{{andi_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/login",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[John] Login with correct credentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has property 'access_token'\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('access_token');\r",
+											"\r",
+											"    pm.environment.set('john_access_token', jsonData.data.access_token);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{john_email}}\",\r\n    \"password\": \"{{john_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/login",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[Andi] Login with incorrect credentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{andi_email}}\",\r\n    \"password\": \"wrongpassword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/login",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "check",
+					"item": [
+						{
+							"name": "[Andi] Check current token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{andi_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/check",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"check"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check without token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/check",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"check"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[Andi] Check current token for merchant",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{andi_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/check/merchant",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"check",
+										"merchant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[John] Check current token for merchant",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/check/merchant",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"check",
+										"merchant"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "[No Test] Prerequisite",
+					"item": [
+						{
+							"name": "[John] Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"pm.environment.set('john_access_token', jsonData.data.access_token);\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{john_email}}\",\r\n    \"password\": \"{{john_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/auth/login",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createProduct",
+					"item": [
+						{
+							"name": "New product when not logged in",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Sepatu Adios",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Mantap sepatunya",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "20000",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[Andi] New product when not merchant",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{andi_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Sepatu Adios",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Mantap sepatunya",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "20000",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New product with invalid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Ini judul",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Deksripsi produk",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "abcd",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "mantap",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New product with invalid price",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Keripik",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Keripik gurih mantap",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "-1",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New product with invalid initial stocks",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Keripik",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Keripik gurih mantap",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "5000",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "-1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New product with valid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has id and createdAt values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonData).haveOwnProperty(\"data\");\r",
+											"    \r",
+											"    pm.expect(jsonData.data).haveOwnProperty(\"id\");\r",
+											"    pm.expect(jsonData.data).haveOwnProperty(\"createdAt\");\r",
+											"\r",
+											"    pm.environment.set('product_1_id', jsonData.data.id);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Sepatu",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Sepatu mantap ukuran 40 coy",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "250000",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "12",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": [
+												"/C:/Users/fatha/Pictures/Konfirmasi Bayar.png",
+												"/C:/Users/fatha/Pictures/Menu.jpg"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New product with invalid images",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Sepatu",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Sepatu mantap ukuran 40 coy",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "250000",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "12",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/fatha/Documents/Link Dokumen & Repository.txt"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New product valid payload without image",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response has id and createdAt values\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"\r",
+											"    pm.expect(jsonData).haveOwnProperty(\"data\");\r",
+											"    \r",
+											"    pm.expect(jsonData.data).haveOwnProperty(\"id\");\r",
+											"    pm.expect(jsonData.data).haveOwnProperty(\"createdAt\");\r",
+											"\r",
+											"    pm.environment.set('product_1_id', jsonData.data.id);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Jam Tangan Jamet",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Jam tangan kekinian",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "120000",
+											"type": "text"
+										},
+										{
+											"key": "initialStock",
+											"value": "33",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": [],
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "getProducts",
+					"item": [
+						{
+							"name": "Get all products",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data is larger than zero\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).length.is.greaterThan(0);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get all products with limit",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data is less than or equal one\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).length.is.lte(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products?limit=1",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products"
+									],
+									"query": [
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get products with specified name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data is equal one\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data.length).equals(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products?name=Sepatu",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Sepatu"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get products with not found name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data is equal zero\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data.length).equals(0);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products?name=Tidak ada",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Tidak ada"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get products specified products with limit",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data is equal one\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data.length).equals(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products?name=Sepatu&limit=1",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Sepatu"
+										},
+										{
+											"key": "limit",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "getProductById",
+					"item": [
+						{
+							"name": "Get product with valid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('title');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('description');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('price');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('sold');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('stocks');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('merchant');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('images');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get product with not found product",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/xxx",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"xxx"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "updateProduct",
+					"item": [
+						{
+							"name": "Update product with valid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has updatedAt properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('updatedAt');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Jam Dinding W11",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Jam dinding tenaga matahari",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "25000",
+											"type": "text"
+										},
+										{
+											"key": "stocks",
+											"value": "0",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update product with valid payload and images",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has updatedAt properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('updatedAt');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Jam Dinding W11",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Jam dinding tenaga matahari",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "25000",
+											"type": "text"
+										},
+										{
+											"key": "stocks",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": [
+												"/C:/Users/fatha/Pictures/original-45048682c431dad5c540db996fc28ef6.png",
+												"/C:/Users/fatha/Pictures/original-c488294ac85ef742c8aab93d6fe04bd0.png"
+											]
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update product with invalid payload",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Jam Dinding W11",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Jam dinding tenaga matahari",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "-1",
+											"type": "text"
+										},
+										{
+											"key": "stocks",
+											"value": "-1",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update product with invalid images",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 422\", function () {\r",
+											"    pm.response.to.have.status(422);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "title",
+											"value": "Jam Dinding W11",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "Jam dinding tenaga matahari",
+											"type": "text"
+										},
+										{
+											"key": "price",
+											"value": "10000",
+											"type": "text"
+										},
+										{
+											"key": "stocks",
+											"value": "5",
+											"type": "text"
+										},
+										{
+											"key": "images",
+											"type": "file",
+											"src": "/C:/Users/fatha/Documents/Link Dokumen & Repository.txt"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "deleteProduct",
+					"item": [
+						{
+							"name": "Soft delete product without logged in",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Soft delete product with credentials",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response data has deletedAt properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    \r",
+											"    pm.expect(jsonData).haveOwnProperty('data');\r",
+											"    pm.expect(jsonData.data).haveOwnProperty('deletedAt');\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{john_access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get deleted product with valid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{protocol}}://{{host}}:{{port}}/{{version}}/products/{{product_1_id}}",
+									"protocol": "{{protocol}}",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"{{version}}",
+										"products",
+										"{{product_1_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
