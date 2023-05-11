@@ -15,7 +15,7 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { User } from '../auth/decorators';
-import { JwtGuard } from '../auth/guards';
+import { JwtGuard, MerchantOnlyGuard } from '../auth/guards';
 import { JwtUserType } from '../auth/types';
 import { CreateProductDto, UpdateProductDto } from './dto';
 import { AssetsFilesValidatorPipe } from './pipes';
@@ -26,7 +26,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, MerchantOnlyGuard)
   @UseInterceptors(FilesInterceptor('images'))
   async createProduct(
     @Body() dto: CreateProductDto,
@@ -70,7 +70,7 @@ export class ProductController {
   }
 
   @Delete(':productId')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, MerchantOnlyGuard)
   async deleteProductById(
     @Param('productId') productId: string,
     @User() merchant: JwtUserType,
@@ -84,7 +84,7 @@ export class ProductController {
   }
 
   @Put(':productId')
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtGuard, MerchantOnlyGuard)
   @UseInterceptors(FilesInterceptor('images'))
   async updateProductById(
     @Param('productId') productId: string,
