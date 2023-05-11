@@ -111,10 +111,14 @@ export class ProductService {
             images: true,
           },
         },
+        deletedAt: true,
       },
     });
 
     if (!product) throw new NotFoundException('Product not found');
+
+    if (product.deletedAt)
+      throw new NotFoundException('Product has been removed by merchant');
 
     return product;
   }
