@@ -82,6 +82,28 @@ export class ProductService {
       where: {
         id: productId,
       },
+      select: {
+        title: true,
+        price: true,
+        description: true,
+        sold: true,
+        stocks: true,
+        merchant: {
+          select: {
+            identity: {
+              select: {
+                name: true,
+                phone: true,
+              },
+            },
+          },
+        },
+        assets: {
+          select: {
+            images: true,
+          },
+        },
+      },
     });
 
     if (!product) throw new NotFoundException('Product not found');
