@@ -161,14 +161,9 @@ export class ProductService {
     if (product.deletedAt)
       throw new NotFoundException('Product has been removed by merchant');
 
-    const assetsUrl: string[] = await Promise.all(
-      product.assets.images.map((assetKey) =>
-        this.minio.presignedGetObject(
-          this.config.get('S3_BUCKET'),
-          assetKey,
-          60 * 60, // 1 hour
-        ),
-      ),
+    const assetsUrl: string[] = await this.minio.presignedGetManyObjects(
+      product.assets.images,
+      60 * 60,
     );
 
     return {
@@ -257,20 +252,8 @@ export class ProductService {
 
     if (assetsKeys.length > 0) {
       await Promise.all([
-        this.minio.removeObjects(
-          this.config.get('S3_BUCKET'),
-          product.assets.images,
-        ),
-
-        Promise.all(
-          images.map((image, index) =>
-            this.minio.putObject(
-              this.config.get('S3_BUCKET'),
-              `${assetsKeys[index]}`,
-              image.buffer,
-            ),
-          ),
-        ),
+        this.minio.removeManyObjects(product.assets.images),
+        this.minio.putManyObjects(assetsKeys, images),
       ]);
     }
 
