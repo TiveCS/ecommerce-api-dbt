@@ -9,6 +9,11 @@ import { JwtUserType } from '../auth/types';
 import { MinioService } from 'src/storage/minio/minio.service';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  GetProductResponse,
+  GetProductsModelType,
+  GetProductsResponse,
+} from './types';
 
 @Injectable()
 export class ProductService {
@@ -64,8 +69,12 @@ export class ProductService {
     });
   }
 
-  async getProducts(name?: string, limit?: number, cursor?: string) {
-    return await this.prisma.product.findMany({
+  async getProducts(
+    name?: string,
+    limit?: number,
+    cursor?: string,
+  ): Promise<GetProductsResponse> {
+    const results = await this.prisma.product.findMany({
       where: name
         ? { title: { contains: name }, deletedAt: null }
         : {
@@ -79,13 +88,45 @@ export class ProductService {
         title: true,
         price: true,
         sold: true,
+        assets: {
+          select: {
+            images: true,
+          },
+        },
       },
       take: limit || 10,
       cursor: cursor ? { id: cursor } : undefined,
     });
+
+    const products: GetProductsResponse = await Promise.all(
+      results.map(async (product) => {
+        const model: GetProductsModelType = {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          sold: product.sold,
+          thumbnailUrl: null,
+        };
+
+        if (product.assets.images.length === 0) return model;
+
+        const thumbnailKey = product.assets.images[0];
+        const thumbnailUrl = await this.minio.presignedGetObject(
+          this.config.get('S3_BUCKET'),
+          thumbnailKey,
+          60 * 60,
+        );
+
+        model.thumbnailUrl = thumbnailUrl;
+
+        return model;
+      }),
+    );
+
+    return products;
   }
 
-  async getProductById(productId: string) {
+  async getProductById(productId: string): Promise<GetProductResponse> {
     const product = await this.prisma.product.findUnique({
       where: {
         id: productId,
@@ -120,7 +161,25 @@ export class ProductService {
     if (product.deletedAt)
       throw new NotFoundException('Product has been removed by merchant');
 
-    return product;
+    const assetsUrl: string[] = await Promise.all(
+      product.assets.images.map((assetKey) =>
+        this.minio.presignedGetObject(
+          this.config.get('S3_BUCKET'),
+          assetKey,
+          60 * 60, // 1 hour
+        ),
+      ),
+    );
+
+    return {
+      title: product.title,
+      price: product.price,
+      description: product.description,
+      sold: product.sold,
+      stocks: product.stocks,
+      merchant: product.merchant.identity,
+      images: assetsUrl,
+    };
   }
 
   async deleteProductById(productId: string, merchant: JwtUserType) {
