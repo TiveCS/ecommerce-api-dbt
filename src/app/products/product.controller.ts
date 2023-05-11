@@ -82,6 +82,7 @@ export class ProductController {
   }
 
   @Delete(':productId')
+  @UseGuards(JwtGuard)
   async deleteProductById(
     @Param('productId') productId: string,
     @User() merchant: JwtUserType,
