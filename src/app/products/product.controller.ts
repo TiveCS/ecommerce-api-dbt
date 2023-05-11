@@ -4,6 +4,7 @@ import {
   DefaultValuePipe,
   Get,
   HttpStatus,
+  Param,
   ParseFilePipeBuilder,
   ParseIntPipe,
   Post,
@@ -64,6 +65,17 @@ export class ProductController {
     return {
       message: 'Products retrieved successfully',
       status: 'success',
+      data,
+    };
+  }
+
+  @Get(':productId')
+  async getProductById(@Param('productId') productId: string) {
+    const data = await this.productService.getProductById(productId);
+
+    return {
+      message: 'Product retrieved successfully',
+      statusL: 'success',
       data,
     };
   }
