@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   DefaultValuePipe,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -77,6 +78,19 @@ export class ProductController {
       message: 'Product retrieved successfully',
       statusL: 'success',
       data,
+    };
+  }
+
+  @Delete(':productId')
+  async deleteProductById(
+    @Param('productId') productId: string,
+    @User() merchant: JwtUserType,
+  ) {
+    await this.productService.deleteProductById(productId, merchant);
+
+    return {
+      message: 'Product deleted successfully',
+      status: 'success',
     };
   }
 }

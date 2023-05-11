@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateProductDto } from './dto';
 import { JwtUserType } from '../auth/types';
@@ -62,7 +66,11 @@ export class ProductService {
 
   async getProducts(name?: string, limit?: number, cursor?: string) {
     return await this.prisma.product.findMany({
-      where: name ? { title: { contains: name } } : {},
+      where: name
+        ? { title: { contains: name }, deletedAt: null }
+        : {
+            deletedAt: null,
+          },
       orderBy: {
         sold: 'desc',
       },
@@ -109,5 +117,40 @@ export class ProductService {
     if (!product) throw new NotFoundException('Product not found');
 
     return product;
+  }
+
+  async deleteProductById(productId: string, merchant: JwtUserType) {
+    const product = await this.prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+      select: {
+        id: true,
+        merchant: {
+          select: {
+            identityId: true,
+          },
+        },
+      },
+    });
+
+    if (!product) throw new NotFoundException('Product not found');
+
+    if (product.merchant.identityId !== merchant.identityId)
+      throw new ForbiddenException(
+        'You are not allowed to delete this product',
+      );
+
+    return await this.prisma.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+      select: {
+        deletedAt: true,
+      },
+    });
   }
 }
