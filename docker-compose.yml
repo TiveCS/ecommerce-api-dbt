@@ -1,5 +1,5 @@
 services:
-  database:
+  dev-db:
     image: postgres
     environment:
       POSTGRES_USER: postgres
@@ -7,5 +7,3 @@ services:
       POSTGRES_DB: ecommerce_app
     ports:
       - 5442:5432
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
