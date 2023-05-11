@@ -1,3 +1,4 @@
 export type JwtUserType = {
-  userId: string;
+  identityId: string;
+  role: 'merchant' | 'customer';
 };

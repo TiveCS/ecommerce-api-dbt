@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto';
-import { JwtGuard } from './guards';
+import { JwtGuard, MerchantOnlyGuard } from './guards';
 import { User } from './decorators';
 import { JwtUserType } from './types';
 
@@ -47,7 +47,19 @@ export class AuthController {
       message: 'Token is valid',
       status: 'success',
       data: {
-        userId: user.userId,
+        userId: user.identityId,
+      },
+    };
+  }
+
+  @Get('check/merchant')
+  @UseGuards(JwtGuard, MerchantOnlyGuard)
+  async checkMerchant(@User() user: JwtUserType) {
+    return {
+      message: 'Token is valid',
+      status: 'success',
+      data: {
+        userId: user.identityId,
       },
     };
   }
