@@ -44,7 +44,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   async check(@User() user: JwtUserType) {
     return {
-      message: 'Token is valid',
+      message: 'Token is valid for user',
       status: 'success',
       data: {
         userId: user.identityId,
@@ -56,7 +56,7 @@ export class AuthController {
   @UseGuards(JwtGuard, MerchantOnlyGuard)
   async checkMerchant(@User() user: JwtUserType) {
     return {
-      message: 'Token is valid',
+      message: 'Token is valid for merchant',
       status: 'success',
       data: {
         userId: user.identityId,
