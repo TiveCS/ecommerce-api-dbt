@@ -97,15 +97,14 @@ export class AuthService {
       role: isMerchant ? 'merchant' : 'customer',
     });
 
-    this.sayTest();
-    this.sayTest();
-    this.sayTest();
-    this.sayTest();
-
     return token;
   }
 
   sayTest() {
+    console.log('test');
+  }
+
+  sayTestAgain() {
     console.log('test');
   }
 }
